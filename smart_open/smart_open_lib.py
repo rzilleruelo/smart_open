@@ -204,6 +204,9 @@ def smart_open(uri, mode="rb", **kw):
                 return HttpOpenRead(parsed_uri, **kw)
             else:
                 raise NotImplementedError("file mode %s not supported for %r scheme", mode, parsed_uri.scheme)
+        elif parsed_uri.scheme in ['gs']:
+            from tensorflow.python.lib.io import file_io
+            return file_io.FileIO(parsed_uri, **kw)
         else:
             raise NotImplementedError("scheme %r is not supported", parsed_uri.scheme)
     elif isinstance(uri, boto.s3.key.Key):
